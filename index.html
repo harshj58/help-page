@@ -75,6 +75,43 @@
             display: block; 
             margin: 0 auto 20px auto; 
         }
+
+        /* Styles for the "Join Our Team" form */
+        .join-team-form {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .join-team-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .join-team-form input[type="text"],
+        .join-team-form input[type="email"],
+        .join-team-form textarea {
+            width: calc(100% - 22px); /* Adjusting for padding and border */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .join-team-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .join-team-form button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .join-team-form button:hover {
+            background-color: #218838;
+        }
     </style>
 
 <script>
@@ -92,21 +129,71 @@ function loadMainContent() {
 	<h2 style="color:blue;">How to access these shortcuts?</h2>
 	<p style="color:powderblue;">You can access them by just cliking on them.
 	<hr style="color:powderblue;">
-	
- 
   `;
 }
+
+// Function to load the "Join Our Team" form
+function loadJoinTeamForm() {
+    document.getElementById("contentArea").innerHTML = `
+        <h2 style="color:blue;">Join Our Team</h2>
+        <p style="color:powderblue;">We are always looking for talented individuals to join us!</p>
+        <div class="join-team-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Tell us about yourself and why you want to join:</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+
+            <button type="button" onclick="submitJoinTeamForm()">Submit Application</button>
+        </div>
+        <div id="formConfirmation" style="margin-top: 20px; color: green; font-weight: bold;"></div>
+    `;
+}
+
+// Function to handle the form submission (client-side only)
+function submitJoinTeamForm() {
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+    const confirmationDiv = document.getElementById('formConfirmation');
+
+    if (name && email && message) {
+        // Log the submitted data to the console (developer tools)
+        console.log("Team Application Submitted:");
+        console.log("Name:", name);
+        console.log("Email:", email);
+        console.log("Message:", message);
+
+        // Display a confirmation message on the page
+        confirmationDiv.innerHTML = "Thank you for your interest! We have received your application (details logged to console).";
+        
+        // Optionally, clear the form fields after submission
+        document.getElementById('name').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('message').value = '';
+    } else {
+        confirmationDiv.innerHTML = "Please fill in all fields.";
+        confirmationDiv.style.color = "red";
+    }
+}
+
+// Initial content load when the page loads
+window.onload = function() {
+    document.getElementById("initialMessage").style.display = "block"; // Ensure "Click Show Content" is visible initially
+};
 </script>
 </head>
 <body>
 
-
-
 <div id="contentArea">
-    <p id="initialMessage">Click "Show Content".</p>
+    <p id="initialMessage">Click "Show Content" to learn about Shorcuteez.</p>
 </div>
 
 <button type="button" onclick="loadMainContent()">Show Content</button>
+<button type="button" onclick="loadJoinTeamForm()" style="margin-left: 10px;">Join Our Team</button>
 
 <p>@2025-----------------------------------------------------------------------------------------Harshj58--------------------------------------------------------------------------------WEBLITE</p>
 
