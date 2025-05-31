@@ -132,58 +132,35 @@ function loadMainContent() {
   `;
 }
 
-// Function to load the "Join Our Team" form
+// ... (your existing clearContent, loadMainContent functions) ...
+
+// Function to load the "Join Our Team" form using FormSubmit.co
 function loadJoinTeamForm() {
     document.getElementById("contentArea").innerHTML = `
         <h2 style="color:blue;">Join Our Team</h2>
         <p style="color:powderblue;">We are always looking for talented individuals to join us!</p>
         <div class="join-team-form">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+            <form action="https://formsubmit.co/YOUR_EMAIL@EXAMPLE.COM" method="POST">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
 
-            <label for="message">Tell us about yourself and why you want to join:</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
+                <label for="message">Tell us about yourself and why you want to join:</label>
+                <textarea id="message" name="message" rows="5" name="message" required></textarea>
 
-            <button type="button" onclick="submitJoinTeamForm()">Submit Application</button>
+                <input type="text" name="_honey" style="display:none"> 
+                
+                <input type="hidden" name="_subject" value="New Team Application!">
+                <button type="submit">Submit Application</button>
+            </form>
+            <div id="formConfirmation" style="margin-top: 20px; font-weight: bold;"></div>
         </div>
-        <div id="formConfirmation" style="margin-top: 20px; color: green; font-weight: bold;"></div>
     `;
 }
 
-// Function to handle the form submission (client-side only)
-function submitJoinTeamForm() {
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
-    const confirmationDiv = document.getElementById('formConfirmation');
-
-    if (name && email && message) {
-        // Log the submitted data to the console (developer tools)
-        console.log("Team Application Submitted:");
-        console.log("Name:", name);
-        console.log("Email:", email);
-        console.log("Message:", message);
-
-        // Display a confirmation message on the page
-        confirmationDiv.innerHTML = "Thank you for your interest! We have received your application (details logged to console).";
-        
-        // Optionally, clear the form fields after submission
-        document.getElementById('name').value = '';
-        document.getElementById('email').value = '';
-        document.getElementById('message').value = '';
-    } else {
-        confirmationDiv.innerHTML = "Please fill in all fields.";
-        confirmationDiv.style.color = "red";
-    }
-}
-
-// Initial content load when the page loads
-window.onload = function() {
-    document.getElementById("initialMessage").style.display = "block"; // Ensure "Click Show Content" is visible initially
-};
+// ... (your existing window.onload) ...
 </script>
 </head>
 <body>
