@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Content Example</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap'); /* Adding a modern font */
+
+        body {
+            font-family: 'Poppins', sans-serif; /* Using Poppins font */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #e0f2f7; /* Lighter, softer background blue */
+            color: #333; /* Darker text for better readability */
+            transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition for dark mode */
+
+            /* Confetti background */
+            background-image:
+             radial-gradient(circle, #ffdd00 5%, transparent 5%),
+             radial-gradient(circle, #ff6699 5%, transparent 5%),
+             radial-gradient(circle, #00ccff 5%, transparent 5%),
+             radial-gradient(circle, #66ff66 5%, transparent 5%),
+             radial-gradient(circle, #cc99ff 5%, transparent 5%);
+            background-size: 20px 20px, 30px 30px, 40px 40px, 50px 50px, 60px 60px;
+            background-position: 0 0, 10px 5px, 5px 15px, 15px 0px, 20px 10px;
+            animation: confetti-scatter 5s linear infinite;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #2c2c2c; /* Dark background */
+            color: #f0f0f0; /* Light text */
+            /* Dark mode confetti background */
+            background-image:
+             radial-gradient(circle, #b3a100 5%, transparent 5%),
+             radial-gradient(circle, #b34773 5%, transparent 5%),
+             radial-gradient(circle, #008ab3 5%, transparent 5%),
+             radial-gradient(circle, #47b347 5%, transparent 5%),
+             radial-gradient(circle, #9973b3 5%, transparent 5%);
+            background-size: 20px 20px, 30px 30px, 40px 40px, 50px 50px, 60px 60px;
+            background-position: 0 0, 10px 5px, 5px 15px, 15px 0px, 20px 10px;
+            animation: confetti-scatter-dark 5s linear infinite;
+        }
+        body.dark-mode .search-container,
+        body.dark-mode #contentArea,
+        body.dark-mode .join-team-form { /* Added .join-team-form for dark mode styling */
+            background-color: #3a3a3a; /* Darker container background */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); /* More prominent shadow in dark mode */
+        }
+        body.dark-mode .search-container input[type="search"] {
+            background-color: #4a4a4a;
+            border-color: #555;
+            color: #f0f0f0;
+        }
+        body.dark-mode .search-container button {
+            background-color: #555; /* Dark mode button color */
+        }
+        body.dark-mode .search-container button:hover {
+            background-color: #666; /* Dark mode button hover */
+        }
+        body.dark-mode #contentArea h1,
+        body.dark-mode #contentArea h2 { /* Added h2 for dark mode styling */
+            color: #FF6B6B; /* Brighter red for dark mode title */
+        }
+        body.dark-mode #contentArea p {
+            color: #e0e0e0; /* Lighter text for dark mode paragraphs */
+        }
+        body.dark-mode #contentArea hr {
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+        }
+        body.dark-mode button {
+            background-color: #555; /* Dark mode button general */
+            color: #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        body.dark-mode button:hover {
+            background-color: #666;
+            transform: translateY(-2px);
+        }
+        /* Specific button colors for dark mode */
+        body.dark-mode button[onclick="loadMainContent()"] {
+            background-color: #28a745; /* Green for show content */
+            color: white;
+        }
+        body.dark-mode button[onclick="loadMainContent()"]:hover {
+            background-color: #218838;
+        }
+        body.dark-mode button[onclick="loadJoinTeamForm()"] {
+            background-color: #1a73e8; /* Blue for join team */
+            color: white;
+        }
+        body.dark-mode button[onclick="loadJoinTeamForm()"]:hover {
+            background-color: #0c5cb2;
+        }
+
+        body.dark-mode #darkModeToggle {
+            background-color: #f0f0f0; /* White background for dark mode toggle in dark mode */
+            color: #333; /* Dark text for dark mode toggle in dark mode */
+        }
+        body.dark-mode #darkModeToggle:hover {
+            background-color: #e0e0e0;
+        }
+        body.dark-mode > p { /* Target the direct paragraph child of body for footer */
+            color: #b0b0b0; /* Lighter color for footer text in dark mode */
+        }
+        body.dark-mode .join-team-form label {
+            color: #f0f0f0;
+        }
+        body.dark-mode .join-team-form input[type="text"],
+        body.dark-mode .join-team-form input[type="email"],
+        body.dark-mode .join-team-form textarea {
+            background-color: #4a4a4a;
+            border-color: #555;
+            color: #f0f0f0;
+        }
+        body.dark-mode .join-team-form button[type="submit"] {
+            background-color: #28a745; /* Green for submit in dark mode */
+            color: white;
+        }
+        body.dark-mode .join-team-form button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+
+        .search-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: background-color 0.5s ease, box-shadow 0.5s ease;
+        }
+        .search-container input[type="search"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 300px;
+            font-size: 16px;
+            transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+        }
+        .search-container button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .search-container button:hover {
+            background-color: #0056b3;
+        }
+
+        #contentArea {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            transition: background-color 0.5s ease, box-shadow 0.5s ease;
+        }
+        #contentArea p {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            transition: color 0.5s ease;
+        }
+        #contentArea a {
+            display: block;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+            color: #007bff; /* Default link color */
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        #contentArea a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        #contentArea h1 {
+            color: #007bff; /* Changed to match initial style */
+            transition: color 0.5s ease;
+        }
+        #contentArea h2 {
+            color: #007bff; /* Changed to match initial style */
+            transition: color 0.5s ease;
+        }
+        #contentArea h3 {
+            color: #555;
+            margin-top: 0;
+            margin-bottom: 20px;
+            transition: color 0.5s ease;
+        }
+        #contentArea hr {
+            border: 0;
+            height: 1px;
+            background-color: powderblue; /* Matching initial hr color */
+            transition: background-image 0.5s ease, background-color 0.5s ease;
+        }
+
+        #contentArea img {
+            width: 100px;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+
+        /* Styles for the "Join Our Team" form */
+        .join-team-form {
+            text-align: left;
+            margin-top: 20px;
+            background-color: white; /* Added for dark mode transition */
+            padding: 20px; /* Added for consistency */
+            border-radius: 8px; /* Added for consistency */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Added for consistency */
+            transition: background-color 0.5s ease, box-shadow 0.5s ease;
+        }
+        .join-team-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            transition: color 0.5s ease;
+        }
+        .join-team-form input[type="text"],
+        .join-team-form input[type="email"],
+        .join-team-form textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+        }
+        .join-team-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .join-team-form button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.5s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .join-team-form button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        /* General button styles for Show Content / Join Our Team */
+        button {
+            padding: 12px 25px;
+            background-color: #28a745; /* Green for show content */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            margin: 15px 10px; /* Spacing between buttons */
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.5s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button:hover {
+            background-color: #218838; /* Darker green on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        /* Specific button style for Join Our Team button */
+        button[onclick="loadJoinTeamForm()"] {
+            background-color: #007bff; /* Blue for join team */
+        }
+        button[onclick="loadJoinTeamForm()"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Dark Mode Toggle Button */
+        #darkModeToggle {
+            background-color: #f0f0f0; /* Light background for light mode toggle */
+            color: #333; /* Dark text for light mode toggle */
+        }
+        #darkModeToggle:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Footer styles */
+        body > p { /* Target the direct paragraph child of body for footer */
+            margin-top: 30px; /* Space above the footer */
+            font-size: 0.9em;
+            color: #777;
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+
+        @keyframes confetti-scatter {
+         0% { background-position: 0 0, 10px 5px, 5px 15px, 15px 0px, 20px 10px; }
+         100% { background-position: 20px 20px, 40px 35px, 45px 55px, 65px 50px, 80px 70px; }
+        }
+
+        @keyframes confetti-scatter-dark {
+         0% { background-position: 0 0, 10px 5px, 5px 15px, 15px 0px, 20px 10px; }
+         100% { background-position: 20px 20px, 40px 35px, 45px 55px, 65px 50px, 80px 70px; }
+        }
+    </style>
+
+<script>
+// Function to clear the content area
+function clearContent() {
+  document.getElementById("contentArea").innerHTML = "";
+}
+
+// Function to load the "main page" content
+function loadMainContent() {
+  document.getElementById("contentArea").innerHTML = `
+    <h1 style="color:blue;">About Shorcuteez</h1>
+	<p style="color:powderblue;">Shorcuteez is a website where you can access everyday websites.No need to be scared,<br> this website has official shortcuts to everyday websites so you dont get scammed by fraud websites.<br>We have a growing number of shortcuts.
+	<hr style="color:powderblue;">
+	<h2 style="color:blue;">How to access these shortcuts?</h2>
+	<p style="color:powderblue;">You can access them by just cliking on them.
+	<hr style="color:powderblue;">
+  `;
+}
+
+// Function to load the "Join Our Team" form using FormSubmit.co
+function loadJoinTeamForm() {
+    document.getElementById("contentArea").innerHTML = `
+        <h2 style="color:blue;">Join Our Team</h2>
+        <p style="color:powderblue;">We are always looking for talented individuals to join us!</p>
+        <div class="join-team-form">
+            <form action="https://formspree.io/f/manjwljp" method="POST">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <p style="font-size: 0.9em; color: #888; margin-top: -10px; margin-bottom: 10px;">Note: The email you enter should be associated with a GitHub account.</p>
+                <p style="font-size: 0.9em; color: #888; margin-top: -10px; margin-bottom: 15px;">Note: You will receive an invitation on GitHub that you need to accept.</p>
+
+
+                <label for="message">Tell us about yourself and why you want to join:</label>
+                <textarea id="message" name="message" rows="5" name="message" required></textarea>
+
+                <input type="text" name="_honey" style="display:none">
+
+                <input type="hidden" name="_subject" value="New Team Application!">
+                <button type="submit">Submit Application</button>
+            </form>
+            <div id="formConfirmation" style="margin-top: 20px; font-weight: bold;"></div>
+        </div>
+    `;
+}
+
+// Dark Mode Toggle Function
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode); // Save dark mode state
+    // Update button text
+    document.getElementById('darkModeToggle').textContent = isDarkMode ? 'Light Mode' : 'Dark Mode';
+}
+
+// Apply dark mode on load
+window.onload = function() {
+    const savedDarkMode = localStorage.getItem('darkMode');
+    if (savedDarkMode === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeToggle').textContent = 'Light Mode';
+    } else {
+        document.getElementById('darkModeToggle').textContent = 'Dark Mode';
+    }
+    // Attach event listener to dark mode toggle button
+    document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+};
+</script>
+</head>
+<body>
+
+<div id="contentArea">
+    <p id="initialMessage">Click "Show Content" to learn about Shorcuteez.</p>
+</div>
+
+<button type="button" onclick="loadMainContent()">Show Content</button>
+<button type="button" onclick="loadJoinTeamForm()">Join Our Team</button>
+<button type="button" id="darkModeToggle">Toggle Dark Mode</button> <p>@2025----------Harshj58----------WEBLITE</p>
+
+</body>
+</html>
